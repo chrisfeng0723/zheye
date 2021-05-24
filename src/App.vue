@@ -15,7 +15,7 @@ const testData: ColumnProps[] = [
     title: 'tetst1的专栏',
     description: '这是一个有意思的专栏',
     avatar:
-      'https://p6.bdxiguaimg.com/img/mosaic-legacy/ff82000018d9a545f5cb~tplv-xg-center-qs:88:88:q75.webp'
+      ''
   },
   {
     id: 2,
