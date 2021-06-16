@@ -65,7 +65,7 @@ export interface LoadedPostProps {
     total?: number;
 }
 
-export interface GloadDataProps {
+export interface GloabalDataProps {
     token: string;
     error: GloabalErrorProps;
     loading: boolean;

@@ -1,69 +1,58 @@
 <template>
-  <div class="container">
-    <GlobalHeader :user="currentUser">123</GlobalHeader>
-    <ColumnList :list="list"></ColumnList>
+  <div class="container-fluid px-0 flex-shrink-0">
+    <global-header :user="currentUser"></global-header>
+    <router-view></router-view>
+     <loader v-if="loading" text="拼命加载中" backgroup="rgba(0,0,0,0.8)"></loader>
   </div>
+  <!--
+  <footer class="text-center py-4 text-secondary bg-light mt-auto">
+       <small>
+      <ul class="list-inline mb-0">
+        <li class="list-inline-item">© 2020 者也专栏</li>
+        <li class="list-inline-item">课程</li>
+        <li class="list-inline-item">文档</li>
+        <li class="list-inline-item">联系</li>
+        <li class="list-inline-item">更多</li>
+      </ul>
+    </small>
+  </footer>
+  -->
 </template>
-
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, computed, watch } from 'vue'
+import { useStore } from 'vuex'
+import createMessage from './base/createMessage'
+import Loader from './base/Loader.vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import ColumnList, { ColumnProps } from './components/ColumnList.vue'
-import GlobalHeader, { UserPros } from './components/GlobalHeader.vue'
-
-const testData: ColumnProps[] = [
-  {
-    id: 1,
-    title: 'tetst1的专栏',
-    description: '这是一个有意思的专栏',
-    avatar:
-      ''
-  },
-  {
-    id: 2,
-    title: 'tetst2的专栏',
-    description: '这是一个有意思的专栏',
-    avatar:
-      'https://p6.bdxiguaimg.com/img/mosaic-legacy/ff82000018d9a545f5cb~tplv-xg-center-qs:88:88:q75.webp'
-  },
-  {
-    id: 3,
-    title: 'tetst3  的专栏',
-    description: '这是一个有意思的专栏',
-    avatar:
-      'https://p6.bdxiguaimg.com/img/mosaic-legacy/ff82000018d9a545f5cb~tplv-xg-center-qs:88:88:q75.webp'
-  }
-]
-
-const currentUser: UserPros = {
-  isLogin: true,
-  name: 'viking',
-  id: 1
-}
-
+import GlobalHeader from './components/GlobalHeader.vue'
+import { GloabalDataProps } from './store/types'
 export default defineComponent({
   name: 'App',
   components: {
-    ColumnList,
-    GlobalHeader
+    GlobalHeader,
+    Loader
   },
-
   setup () {
+    const store = useStore<GloabalDataProps>()
+    const currentUser = computed(() => store.state.user)
+    const isLoading = computed(() => store.state.loading)
+    const error = computed(() => store.state.error)
+
+    watch(() => error.value.status, () => {
+      const { status, message } = error.value
+      if (status && message) {
+        createMessage(message, 'error')
+      }
+    })
     return {
-      list: testData,
-      currentUser
+      currentUser,
+      isLoading,
+      error
+
     }
   }
 })
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
